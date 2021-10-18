@@ -2,6 +2,8 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardImg, CardText, CardTitle, Button, Modal, ModalBody, ModalHeader, Row, FormGroup, Col, Label } from "reactstrap";
 import { Control, LocalForm, Errors } from "react-redux-form";
+import { Loading } from "./LoadingComponent";
+import { baseUrl } from "../shared/baseUrl";
 
 
 
@@ -24,29 +26,49 @@ const DishDetail = (props) => {
             </div>
             <div className="row">
                 <div className="col-12 col-md-5 m-1">
-                    {RenderDish(props.dish)}
+                    {RenderDish(props)}
                 </div>
                 <div className="col-12 col-md-5 m-1">
-                    {RenderComments(props.comments)}
+                    {RenderComments(props.comments, props.addComment, props.dish.id)}
                 </div>
             </div>
         </div>
     )
 }
 
-function RenderDish(dish) {
-    return (
-        <Card>
-            <CardImg top src={dish.image} alt={dish.name} width="100%"/>
-            <CardBody>
-                <CardTitle>{dish.name}</CardTitle>
-                <CardText>{dish.description}</CardText>
-            </CardBody>
-        </Card>
-    )
+function RenderDish(props) {
+    if (props.isLoading) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    else if (props.errMess) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        );
+    }
+    else if (props.dish != null) {    
+        return (
+            <Card>
+                <CardImg top src={baseUrl + props.dish.image} alt={props.dish.name} width="100%"/>
+                <CardBody>
+                    <CardTitle>{props.dish.name}</CardTitle>
+                    <CardText>{props.dish.description}</CardText>
+                </CardBody>
+            </Card>
+        )
+    }
 }
 
-function RenderComments(comments) {
+function RenderComments(comments, addComment, dishId) {
     if(!comments) return <div></div>
 
     const commentData = comments.map( (com) => {
@@ -62,7 +84,7 @@ function RenderComments(comments) {
         <div>
             <h4>Comments</h4>
             {commentData}
-            <CommentForm />
+            <CommentForm dishId={dishId} addComment={addComment}/>
         </div>
     )
 }
@@ -91,7 +113,7 @@ class CommentForm extends Component {
     }
 
     modalSubmit(val) {
-        alert(JSON.stringify(val))
+        this.props.addComment(this.props.dishId, val.rating, val.author, val.comment);
         this.toggleModal()
     }
 
