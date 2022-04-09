@@ -1,7 +1,8 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import {Stagger} from 'react-animation-components'
+import {Stagger, Fade} from 'react-animation-components'
+import { baseUrl } from '../shared/baseUrl';
 
 function About({leaders, isLoading, errMess}) {
 
@@ -13,7 +14,9 @@ function About({leaders, isLoading, errMess}) {
             } else 
                 return leaders.map((leader) => {
                     return (
-                        RenderLeader(leader)
+                        <Fade in>
+                            {RenderLeader(leader)}
+                        </Fade>
                     );
                 });
                 
@@ -94,7 +97,7 @@ function RenderLeader(leader) {
         <div key={leader.id}>
             <Media tag="li">
                 <Media left top>
-                    <Media object src={leader.image} alt={leader.name} />
+                    <Media object src={baseUrl + leader.image} alt={leader.name} />
                 </Media>
                 <Media body className="ml-4">
                     <Media heading>{leader.name}</Media>

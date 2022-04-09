@@ -1,9 +1,9 @@
 
 export const Loading = () => {
     return(
-        <div className="col-12">
+        <div className="col-12 justify-items-center">
             <span className="fa fa-spinner fa-pulse fa-3x fa-fw text-primary"></span>
-            <p>Loading . . .</p>
+            Loading . . . . .
         </div>
     )
 }

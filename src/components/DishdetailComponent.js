@@ -30,7 +30,9 @@ const DishDetail = (props) => {
                     {RenderDish(props)}
                 </div>
                 <div className="col-12 col-md-5 m-1">
+                    <Stagger in>
                         {RenderComments(props.comments, props.postComment, props.dish.id)}
+                    </Stagger>
                 </div>
             </div>
         </div>
@@ -80,8 +82,12 @@ function RenderComments(comments, postComment, dishId) {
 
     const commentData = comments.map( (com) => {
         return(<>
-                    <li>{com.comment}</li>
-                    <li>-- {com.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(com.date)))}</li>   
+                <Fade in>
+                <li key={com.id}>
+                <p>{com.comment}</p>
+                <p>-- {com.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(com.date)))}</p>
+                </li>                
+                </Fade>
             </>
         )
     })
